@@ -6,10 +6,10 @@ import { P5CanvasInstance, Sketch } from '@p5-wrapper/react';
 // This function contains the entire art logic
 const sketch: Sketch = (p5: P5CanvasInstance) => {
   // Configuration
-  const particleCount = 800;  
-  const noiseScale = 0.01;    
-  const flowSpeed = 0.5;      
-  const trailStrength = 10;   
+  const particleCount = 4000;  
+  const noiseScale = 0.005;    
+  const flowSpeed = 1;      
+  const trailStrength = 5;   
   
   // Store our particles here
   let particles: Particle[] = [];
@@ -38,6 +38,10 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
       p.edges();
       p.show();
     });
+  };
+  p5.windowResized = () => {
+    p5.resizeCanvas(window.innerWidth, window.innerHeight);
+    p5.background(10); // Reset background to avoid glitches
   };
 
   // --- The Particle Class ---
