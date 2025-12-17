@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@p5-wrapper/next": "^3.0.1",
+    "@p5-wrapper/react": "^5.0.2",
     "next": "16.0.10",
+    "p5": "^2.1.2",
     "react": "19.2.1",
     "react-dom": "19.2.1"
   },
