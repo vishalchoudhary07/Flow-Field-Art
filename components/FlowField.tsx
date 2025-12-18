@@ -1,18 +1,23 @@
 'use client';
-
+import { useState } from 'react';
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 import { P5CanvasInstance, Sketch } from '@p5-wrapper/react';
 
 // This function contains the entire art logic
 const sketch: Sketch = (p5: P5CanvasInstance) => {
   // Configuration
-  const particleCount = 4000;  
-  const noiseScale = 0.005;    
-  const flowSpeed = 1;      
-  const trailStrength = 5;   
+  let particleCount = 4000;  
+  let noiseScale = 0.005;    
+  let flowSpeed = 1;      
+  let trailStrength = 5;   
   
-  // Store our particles here
   let particles: Particle[] = [];
+
+  p5.updateWithProps = (props: any) => {
+    if (props.flowSpeed !== undefined) flowSpeed = props.flowSpeed;
+    if (props.noiseScale !== undefined) noiseScale = props.noiseScale;
+    if (props.trailStrength !== undefined) trailStrength = props.trailStrength;
+  };
 
   
   p5.setup = () => {
@@ -129,5 +134,52 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
 };
 
 export default function FlowField() {
-  return <NextReactP5Wrapper sketch={sketch} />;
+  // 1. Create State for our controls with default values
+  const [speed, setSpeed] = useState(1);
+  const [noise, setNoise] = useState(0.005);
+  const [trail, setTrail] = useState(5);
+
+  return (
+    <div className="relative w-full h-full">
+      <NextReactP5Wrapper 
+        sketch={sketch}
+        flowSpeed={speed}
+        noiseScale={noise}
+        trailStrength={trail}
+      />
+
+      <div className="absolute top-5 right-5 z-50 bg-neutral-900/80 p-5 rounded-lg border border-white/10 backdrop-blur-sm text-white w-64 shadow-2xl">
+        <h3 className="text-sm font-bold mb-4 uppercase tracking-widest text-neutral-400">Controls</h3>
+        
+        {/* Speed Slider */}
+        <div className="mb-4">
+          <label className="block text-xs mb-1">Flow Speed: {speed}</label>
+          <input 
+            type="range" min="0.1" max="5" step="0.1" 
+            value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))}
+            className="w-full accent-white cursor-pointer"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-xs mb-1">Noise Scale: {noise}</label>
+          <input 
+            type="range" min="0.001" max="0.05" step="0.001" 
+            value={noise} onChange={(e) => setNoise(parseFloat(e.target.value))}
+            className="w-full accent-white cursor-pointer"
+          />
+        </div>
+
+        {/* Trail Slider */}
+        <div className="mb-0">
+          <label className="block text-xs mb-1">Trail Fade: {trail}</label>
+          <input 
+            type="range" min="1" max="50" step="1" 
+            value={trail} onChange={(e) => setTrail(parseInt(e.target.value))}
+            className="w-full accent-white cursor-pointer"
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
