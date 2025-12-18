@@ -75,9 +75,23 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
       this.acc.add(force);
     }
 
+    repel() {
+      let mouse = this.p.createVector(this.p.mouseX, this.p.mouseY);
+      
+      let dir = this.p.createVector(this.pos.x - mouse.x, this.pos.y - mouse.y);
+      
+      let distance = dir.mag();
+      
+      if (distance < 150 && distance > 0) {
+        dir.setMag(150 - distance); 
+        dir.mult(0.02); 
+        this.acc.add(dir);
+      }
+    }
+
     update() {
       this.vel.add(this.acc);
-      this.vel.limit(2); // Speed limit
+      this.vel.limit(2);
       this.pos.add(this.vel);
       this.acc.mult(0); 
     }
