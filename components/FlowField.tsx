@@ -17,7 +17,8 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
   
   p5.setup = () => {
     p5.createCanvas(window.innerWidth, window.innerHeight);
-    p5.background(10); 
+    p5.colorMode(p5.HSB, 360, 255, 255, 255);
+    p5.background(10);
     
     // Create the particles
     for (let i = 0; i < particleCount; i++) {
@@ -90,9 +91,14 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
     }
 
     show() {
+      let speed = this.vel.mag();
+
+      let brightness = this.p.map(speed, 0, 2, 50, 255);
       
-      this.p.stroke(this.colorHue, 200, 255, 150); 
-      this.p.strokeWeight(2);
+      let weight = this.p.map(speed, 0, 2, 1, 3);
+
+      this.p.stroke(this.colorHue, 200, brightness, 150); 
+      this.p.strokeWeight(weight);
       this.p.point(this.pos.x, this.pos.y);
     }
   }
