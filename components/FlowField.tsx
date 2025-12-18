@@ -35,6 +35,7 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
 
     particles.forEach(p => {
       p.follow(noiseScale, flowSpeed);
+      p.repel();
       p.update();
       p.edges();
       p.show();
