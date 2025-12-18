@@ -46,6 +46,14 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
     p5.background(10); // Reset background to avoid glitches
   };
 
+  p5.keyPressed = () => {
+    // Press 'S' or 's' to save the canvas
+    if (p5.key === 's' || p5.key === 'S') {
+      p5.saveCanvas('my-flow-field', 'png');
+      console.log('Canvas saved!');
+    }
+  };
+
   // --- The Particle Class ---
   class Particle {
     pos: any;
