@@ -18,6 +18,7 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
   p5.setup = () => {
     p5.createCanvas(window.innerWidth, window.innerHeight);
     p5.colorMode(p5.HSB, 360, 255, 255, 255);
+    p5.noiseDetail(8, 0.65);
     p5.background(10);
     
     // Create the particles
