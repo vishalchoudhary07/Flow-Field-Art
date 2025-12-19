@@ -11,7 +11,7 @@ export default function Home() {
       </div>
 
       {/* The P5 Sketch */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0">
         <FlowField />
       </div>
       
