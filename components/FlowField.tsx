@@ -15,13 +15,6 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
   if (props.flowSpeed !== undefined) flowSpeed = props.flowSpeed;
   if (props.noiseScale !== undefined) noiseScale = props.noiseScale;
   if (props.trailStrength !== undefined) trailStrength = props.trailStrength;
-  if (props.particleCount !== undefined && props.particleCount !== particleCount) {
-    particleCount = props.particleCount;
-    particles = [];
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle(p5));
-    }
-  }
 };
 
 
@@ -139,12 +132,10 @@ export default function FlowField() {
           flowSpeed={speed}
           noiseScale={noise}
           trailStrength={trail}
-          particleCount={particles}
         />
       </div>
 
       {/* Professional Control Panel */}
-      {/* Professional Control Panel - SMALLER & IMPROVED */}
 <div className="fixed top-6 right-6 z-[9999] pointer-events-auto">
   <div className={`bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl transition-all duration-300 ${isCollapsed ? 'w-12 h-12' : 'w-72'} overflow-hidden`}>
     
@@ -178,53 +169,6 @@ export default function FlowField() {
     {!isCollapsed && (
       <div className="p-4 space-y-4">
         
-        {/* Particle Count Control - NEW */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label className="text-[10px] font-medium text-white uppercase tracking-wider">Particles</label>
-            <span className="px-2 py-0.5 bg-orange-500/20 text-orange-300 text-[10px] font-bold rounded-md border border-orange-500/30">
-              {particles}
-            </span>
-          </div>
-          <input 
-            type="range" 
-            min="1000" 
-            max="8000" 
-            step="500" 
-            value={particles} 
-            onChange={(e) => setParticles(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-700/50 rounded-full appearance-none cursor-pointer
-              [&::-webkit-slider-thumb]:appearance-none
-              [&::-webkit-slider-thumb]:w-3
-              [&::-webkit-slider-thumb]:h-3
-              [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-gradient-to-r
-              [&::-webkit-slider-thumb]:from-orange-400
-              [&::-webkit-slider-thumb]:to-red-400
-              [&::-webkit-slider-thumb]:shadow-lg
-              [&::-webkit-slider-thumb]:shadow-orange-500/50
-              [&::-webkit-slider-thumb]:cursor-pointer
-              [&::-webkit-slider-thumb]:transition-all
-              [&::-webkit-slider-thumb]:hover:scale-110
-              [&::-moz-range-thumb]:w-3
-              [&::-moz-range-thumb]:h-3
-              [&::-moz-range-thumb]:rounded-full
-              [&::-moz-range-thumb]:bg-gradient-to-r
-              [&::-moz-range-thumb]:from-orange-400
-              [&::-moz-range-thumb]:to-red-400
-              [&::-moz-range-thumb]:border-0
-              [&::-moz-range-thumb]:shadow-lg
-              [&::-moz-range-thumb]:shadow-orange-500/50
-              [&::-moz-range-thumb]:cursor-pointer
-              [&::-moz-range-thumb]:transition-all
-              [&::-moz-range-thumb]:hover:scale-110"
-          />
-          <div className="flex justify-between text-[9px] text-white/50 font-mono">
-            <span>1K</span>
-            <span>8K</span>
-          </div>
-        </div>
-
         {/* Flow Speed Control */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
