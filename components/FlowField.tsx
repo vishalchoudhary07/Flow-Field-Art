@@ -3,10 +3,8 @@ import { useState } from 'react';
 import { NextReactP5Wrapper } from '@p5-wrapper/next';
 import { P5CanvasInstance, Sketch } from '@p5-wrapper/react';
 
-// This function contains the entire art logic
 const sketch: Sketch = (p5: P5CanvasInstance) => {
-  // Configuration
-  let particleCount = 4000;  
+  let particleCount = 2000;  
   let noiseScale = 0.005;    
   let flowSpeed = 1;      
   let trailStrength = 5;   
@@ -25,7 +23,6 @@ const sketch: Sketch = (p5: P5CanvasInstance) => {
     p5.noiseDetail(8, 0.65);
     p5.background(10);
     
-    // Create the particles
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle(p5));
     }
@@ -122,11 +119,12 @@ export default function FlowField() {
   const [speed, setSpeed] = useState(1);
   const [noise, setNoise] = useState(0.005);
   const [trail, setTrail] = useState(5);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <div className="relative w-full h-full">
-      {/* Canvas wrapper with pointer-events-none */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Canvas */}
+      <div className="absolute inset-0">
         <NextReactP5Wrapper 
           sketch={sketch}
           flowSpeed={speed}
@@ -135,35 +133,186 @@ export default function FlowField() {
         />
       </div>
 
-      {/* Control Panel with pointer-events-auto */}
-      <div className="fixed top-5 right-5 z-[9999] bg-neutral-900/80 p-5 rounded-lg border border-white/10 backdrop-blur-sm text-white w-64 shadow-2xl pointer-events-auto">
-        <h3 className="text-sm font-bold mb-4 uppercase tracking-widest text-neutral-400">Controls</h3>
-        
-        <div className="mb-4">
-          <label className="block text-xs mb-1">Flow Speed: {speed}</label>
-          <input 
-            type="range" min="0.1" max="5" step="0.1" 
-            value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))}
-            className="w-full accent-white cursor-pointer"
-          />
-        </div>
+      {/* Professional Control Panel */}
+      <div className="fixed top-6 right-6 z-[9999] pointer-events-auto">
+        <div className={`bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl transition-all duration-300 ${isCollapsed ? 'w-14 h-14' : 'w-80'} overflow-hidden`}>
+          
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-white/10">
+            {!isCollapsed && (
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <h3 className="text-sm font-semibold text-white tracking-wide">Flow Controls</h3>
+              </div>
+            )}
+            <button 
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="ml-auto p-1.5 hover:bg-white/10 rounded-lg transition-all duration-200 group"
+            >
+              <svg 
+                className={`w-4 h-4 text-white transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`}
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-        <div className="mb-4">
-          <label className="block text-xs mb-1">Noise Scale: {noise}</label>
-          <input 
-            type="range" min="0.001" max="0.05" step="0.001" 
-            value={noise} onChange={(e) => setNoise(parseFloat(e.target.value))}
-            className="w-full accent-white cursor-pointer"
-          />
-        </div>
+          {/* Controls Content */}
+          {!isCollapsed && (
+            <div className="p-5 space-y-6">
+              
+              {/* Flow Speed Control */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-medium text-white uppercase tracking-wider">Flow Speed</label>
+                  <span className="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-lg border border-emerald-500/30">
+                    {speed.toFixed(1)}
+                  </span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0.1" 
+                  max="5" 
+                  step="0.1" 
+                  value={speed} 
+                  onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-gradient-to-r
+                    [&::-webkit-slider-thumb]:from-emerald-400
+                    [&::-webkit-slider-thumb]:to-cyan-400
+                    [&::-webkit-slider-thumb]:shadow-lg
+                    [&::-webkit-slider-thumb]:shadow-emerald-500/50
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-webkit-slider-thumb]:transition-all
+                    [&::-webkit-slider-thumb]:hover:scale-110
+                    [&::-moz-range-thumb]:w-4
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-gradient-to-r
+                    [&::-moz-range-thumb]:from-emerald-400
+                    [&::-moz-range-thumb]:to-cyan-400
+                    [&::-moz-range-thumb]:border-0
+                    [&::-moz-range-thumb]:shadow-lg
+                    [&::-moz-range-thumb]:shadow-emerald-500/50
+                    [&::-moz-range-thumb]:cursor-pointer
+                    [&::-moz-range-thumb]:transition-all
+                    [&::-moz-range-thumb]:hover:scale-110"
+                />
+                <div className="flex justify-between text-[10px] text-white/50 font-mono">
+                  <span>0.1</span>
+                  <span>5.0</span>
+                </div>
+              </div>
 
-        <div className="mb-0">
-          <label className="block text-xs mb-1">Trail Fade: {trail}</label>
-          <input 
-            type="range" min="1" max="50" step="1" 
-            value={trail} onChange={(e) => setTrail(parseInt(e.target.value))}
-            className="w-full accent-white cursor-pointer"
-          />
+              {/* Noise Scale Control */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-medium text-white uppercase tracking-wider">Noise Scale</label>
+                  <span className="px-2.5 py-1 bg-purple-500/20 text-purple-300 text-xs font-bold rounded-lg border border-purple-500/30">
+                    {noise.toFixed(3)}
+                  </span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0.001" 
+                  max="0.05" 
+                  step="0.001" 
+                  value={noise} 
+                  onChange={(e) => setNoise(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-gradient-to-r
+                    [&::-webkit-slider-thumb]:from-purple-400
+                    [&::-webkit-slider-thumb]:to-pink-400
+                    [&::-webkit-slider-thumb]:shadow-lg
+                    [&::-webkit-slider-thumb]:shadow-purple-500/50
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-webkit-slider-thumb]:transition-all
+                    [&::-webkit-slider-thumb]:hover:scale-110
+                    [&::-moz-range-thumb]:w-4
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-gradient-to-r
+                    [&::-moz-range-thumb]:from-purple-400
+                    [&::-moz-range-thumb]:to-pink-400
+                    [&::-moz-range-thumb]:border-0
+                    [&::-moz-range-thumb]:shadow-lg
+                    [&::-moz-range-thumb]:shadow-purple-500/50
+                    [&::-moz-range-thumb]:cursor-pointer
+                    [&::-moz-range-thumb]:transition-all
+                    [&::-moz-range-thumb]:hover:scale-110"
+                />
+                <div className="flex justify-between text-[10px] text-white/50 font-mono">
+                  <span>0.001</span>
+                  <span>0.050</span>
+                </div>
+              </div>
+
+              {/* Trail Fade Control */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-medium text-white uppercase tracking-wider">Trail Fade</label>
+                  <span className="px-2.5 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold rounded-lg border border-blue-500/30">
+                    {trail}
+                  </span>
+                </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="50" 
+                  step="1" 
+                  value={trail} 
+                  onChange={(e) => setTrail(parseInt(e.target.value))}
+                  className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:w-4
+                    [&::-webkit-slider-thumb]:h-4
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-gradient-to-r
+                    [&::-webkit-slider-thumb]:from-blue-400
+                    [&::-webkit-slider-thumb]:to-indigo-400
+                    [&::-webkit-slider-thumb]:shadow-lg
+                    [&::-webkit-slider-thumb]:shadow-blue-500/50
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-webkit-slider-thumb]:transition-all
+                    [&::-webkit-slider-thumb]:hover:scale-110
+                    [&::-moz-range-thumb]:w-4
+                    [&::-moz-range-thumb]:h-4
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-gradient-to-r
+                    [&::-moz-range-thumb]:from-blue-400
+                    [&::-moz-range-thumb]:to-indigo-400
+                    [&::-moz-range-thumb]:border-0
+                    [&::-moz-range-thumb]:shadow-lg
+                    [&::-moz-range-thumb]:shadow-blue-500/50
+                    [&::-moz-range-thumb]:cursor-pointer
+                    [&::-moz-range-thumb]:transition-all
+                    [&::-moz-range-thumb]:hover:scale-110"
+                />
+                <div className="flex justify-between text-[10px] text-white/50 font-mono">
+                  <span>1</span>
+                  <span>50</span>
+                </div>
+              </div>
+
+              {/* Footer with Tip */}
+              <div className="pt-4 border-t border-white/10">
+                <p className="text-[10px] text-white/60 text-center font-mono">
+                  💡 Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">S</kbd> to save canvas
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
